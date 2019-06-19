@@ -39,17 +39,16 @@ line_x = 0
 while line_x < x:
     line_used_x = line_x**(1.5)
     curr_points = filter(lambda point: point[0] == line_x**1.5, points_list)
-    print "---"
-    print curr_points
-    eligible_points = filter(lambda point: point[0] == (line_x + .5)**(1.5), points_list)
-    print eligible_points
+    eligible_points = filter(lambda point: point[0] > (line_x)**(1.5) and point[0] < (line_x + 4)**(1.5), points_list)
     if len(eligible_points) == 0:
         break
     random.shuffle(curr_points)
     random.shuffle(eligible_points)
-    for i in range(len(curr_points)):
-        curr_point = curr_points[i]
-        point_to_match = eligible_points[i % len(eligible_points)]
+    longer_list = curr_points if len(curr_points) > len(eligible_points) else eligible_points
+    shorter_list = curr_points if len(curr_points) < len(eligible_points) else eligible_points
+    for i in range(len(longer_list)):
+        curr_point = longer_list[i]
+        point_to_match = shorter_list[i % len(shorter_list)]
         c.stroke(
             path.line(curr_point[0], curr_point[1], point_to_match[0], point_to_match[1]),
             [style.linecap.round, style.linewidth(0.4)],
